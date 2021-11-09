@@ -11,7 +11,9 @@ export default StyleSheet.create({
         padding: 10,
         backgroundColor: 'pink',
         borderRadius: 10,
-        marginTop: '3%'
+        marginTop: '3%',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     backgroundIndex: {
         width: '13%',
@@ -25,13 +27,17 @@ export default StyleSheet.create({
         color: 'white'
     },
     backgroundValue: {
+        width: '70%',
         padding: 10,
         backgroundColor: 'blue',
         marginRight: 10,
-        borderRadius: 10
+        borderRadius: 10,
     }, 
     value: {
         color: 'white'
+    },
+    backgroundGambar: {
+        flexDirection: 'row',
     },
     backgroundInput: {
         padding: 7,
@@ -40,5 +46,13 @@ export default StyleSheet.create({
     },
     textInput: {
 
+    },
+    editlogo: {
+        width: 40,
+        height: 40
+    },
+    buanglogo: {
+        width: 40,
+        height: 40
     }
 })
