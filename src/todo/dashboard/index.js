@@ -19,21 +19,26 @@ export default class Dashboard extends Component {
         super();
         this.state = {
             token: '',
-            dataToDo: [],
             title: '',
-            note: ''
+            note: '',
+            dataToDo: [
+                { title: 'Indra Damar Jati', note: 'Indra Damar Jati' },
+                { title: 'Indra', note: 'Indra' },
+                { title: 'Indra Damar', note: 'Indra Damar' },
+                { title: 'Indra D', note: 'Indra D' }
+            ]
         }
     }
 
-    componentDidMount() {
-        AsyncStorage.getItem('token')
-            .then(value => {
-                let data = JSON.parse(value)
-                this.setState({ token: data })
-                console.log(this.state.token)
-            })
-            .then(() => this.mengGetTodo())
-    }
+    // componentDidMount() {
+    //     AsyncStorage.getItem('token')
+    //         .then(value => {
+    //             let data = JSON.parse(value)
+    //             this.setState({ token: data })
+    //             console.log(this.state.token)
+    //         })
+    //         .then(() => this.mengGetTodo())
+    // }
 
     mengGetTodo = () => {
         fetch('https://api-todoapp-pp.herokuapp.com/api/todo', {
@@ -53,20 +58,22 @@ export default class Dashboard extends Component {
     }
 
     deleteToDo = (id) => {
-        fetch(`https://api-todoapp-pp.herokuapp.com/api/todo/${id}`, {
-            method: 'DELETE',
-            headers: {
-                Accept: 'application/json',
-                Authorization: `bearer ${this.state.token}`
-            },
-            redirect: 'follow'
-        })
-            .then(response => response.json())
-            .then(respon => {
-                console.log(respon)
-                this.mengGetTodo()
-            })
-            .catch(e => console.log(e))
+        // fetch(`https://api-todoapp-pp.herokuapp.com/api/todo/${id}`, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         Authorization: `bearer ${this.state.token}`
+        //     },
+        //     redirect: 'follow'
+        // })
+        //     .then(response => response.json())
+        //     .then(respon => {
+        //         console.log(respon)
+        //         this.mengGetTodo()
+        //     })
+        //     .catch(e => console.log(e))
+
+        /// this.state.dataToDo.filter(id => )
     }
 
     deleteToDoConfirmation = (value) => {
@@ -90,13 +97,14 @@ export default class Dashboard extends Component {
     }
 
     DaftarList = () => {
-        return this.state.dataToDo.map((value) => {
+        return this.state.dataToDo.map((value, index) => {
             return (
                 <TouchableOpacity style={styles.backgroundList} onPress={() => this.props.navigation.navigate('EditToDo', { title: value.title, note: value.note, id: value.id })}>
                     <View style={styles.backgroundtitle}>
                         <Text style={styles.tekstitle}>{value.title}</Text>
-                        
-                        <TouchableOpacity onPress={() => this.deleteToDoConfirmation(value.id)}>
+
+                        {/* <TouchableOpacity onPress={() => this.deleteToDoConfirmation(value)}> */}
+                        <TouchableOpacity onPress={() => this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })}>
                             <Image source={buang} style={styles.buanglogo} />
                         </TouchableOpacity>
                     </View>

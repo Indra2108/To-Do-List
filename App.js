@@ -19,10 +19,10 @@ export default class App extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Mengsplash' screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Mengsplash" component={Mengsplash} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
+        <Stack.Navigator initialRouteName='Dashboard' screenOptions={{ headerShown: false }}>
+          {/* <Stack.Screen name="Mengsplash" component={Mengsplash} /> */}
+          {/* <Stack.Screen name="Login" component={Login} /> */}
+          {/* <Stack.Screen name="Register" component={Register} /> */}
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name="AddToDo" component={AddToDo} />
           <Stack.Screen name="EditToDo" component={EditToDo} />

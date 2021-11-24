@@ -13,7 +13,10 @@ export default class AddToDo extends Component {
         this.state = {
             token: '',
             title: '',
-            note: ''
+            note: '',
+            list: [
+                {title: 'Indra Damar Jati', note: 'Indra Damar Ganteng'}
+            ]
         }
     }
 
