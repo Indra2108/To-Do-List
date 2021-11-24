@@ -30,60 +30,14 @@ export default class Dashboard extends Component {
         }
     }
 
-    // componentDidMount() {
-    //     AsyncStorage.getItem('token')
-    //         .then(value => {
-    //             let data = JSON.parse(value)
-    //             this.setState({ token: data })
-    //             console.log(this.state.token)
-    //         })
-    //         .then(() => this.mengGetTodo())
-    // }
-
-    mengGetTodo = () => {
-        fetch('https://api-todoapp-pp.herokuapp.com/api/todo', {
-            method: 'GET',
-            redirect: 'follow',
-            headers: {
-                Authorization: `bearer ${this.state.token}`,
-            },
-        })
-            .then(respon => respon.json())
-            .then(response => {
-                console.log(response)
-                this.setState({ dataToDo: response.data })
-                console.log(this.state.dataToDo)
-            })
-            .catch(error => console.log(error))
-    }
-
-    deleteToDo = (id) => {
-        // fetch(`https://api-todoapp-pp.herokuapp.com/api/todo/${id}`, {
-        //     method: 'DELETE',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         Authorization: `bearer ${this.state.token}`
-        //     },
-        //     redirect: 'follow'
-        // })
-        //     .then(response => response.json())
-        //     .then(respon => {
-        //         console.log(respon)
-        //         this.mengGetTodo()
-        //     })
-        //     .catch(e => console.log(e))
-
-        /// this.state.dataToDo.filter(id => )
-    }
-
-    deleteToDoConfirmation = (value) => {
+    deleteToDoConfirmation = (value, index) => {
         Alert.alert(
             "Perhatian!",
             "Apa anda yakin ingin menghapus todo yang ini?",
             [
                 {
                     text: "Oke",
-                    onPress: () => this.deleteToDo(value)
+                    onPress: () => this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })
                 },
                 {
                     text: 'Batal',
@@ -103,8 +57,7 @@ export default class Dashboard extends Component {
                     <View style={styles.backgroundtitle}>
                         <Text style={styles.tekstitle}>{value.title}</Text>
 
-                        {/* <TouchableOpacity onPress={() => this.deleteToDoConfirmation(value)}> */}
-                        <TouchableOpacity onPress={() => this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })}>
+                        <TouchableOpacity onPress={() => this.deleteToDoConfirmation(value, index)}>
                             <Image source={buang} style={styles.buanglogo} />
                         </TouchableOpacity>
                     </View>
