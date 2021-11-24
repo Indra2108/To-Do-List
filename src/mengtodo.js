@@ -29,9 +29,9 @@ export default class Mengtodo extends Component {
                         <TouchableOpacity>
                             <Image source={edit} style={styles.editlogo} />
                         </TouchableOpacity>
-                        <View>
+                        <TouchableOpacity>
                             <Image source={buang} style={styles.buanglogo} />    
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </View>
             )
