@@ -17,17 +17,24 @@ import userprofile from '../assets/user.png';
 export default class Dashboard extends Component {
     constructor() {
         super();
+        console.log('==> constructor')
         this.state = {
             token: '',
             title: '',
             note: '',
             dataToDo: [
-                { title: 'Indra Damar Jati', note: 'Indra Damar Jati' },
-                { title: 'Indra', note: 'Indra' },
-                { title: 'Indra Damar', note: 'Indra Damar' },
-                { title: 'Indra D', note: 'Indra D' }
+                // { title: 'Indra Damar Jati', note: 'Indra Damar Jati' },
+                // { title: 'Indra', note: 'Indra' },
+                // { title: 'Indra Damar', note: 'Indra Damar' },
+                // { title: 'Indra D', note: 'Indra D' }
             ]
         }
+        AsyncStorage.getItem('todo').then(value => {
+            console.log('==> AS.getItem()')
+            let dataparse = JSON.parse(value)
+            this.setState({ dataToDo: dataparse })
+            console.log('==> datatodo: ' + this.state.dataToDo)
+        })
     }
 
     componentDidUpdate() {
@@ -50,7 +57,7 @@ export default class Dashboard extends Component {
                     text: "Oke",
                     onPress: () => {
                         console.log('==> Pressed OKE => Menghapus Todo')
-                        this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })    
+                        this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })
                     }
                 },
                 {

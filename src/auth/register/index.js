@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
 
+// IMPORT LIBRARY
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // IMPORT STYLE
-import styles from "./styles";
+import Style from "./Style";
 
 // IMPORT PICTURE
 import open from '../assets/eye.png';
@@ -12,88 +15,128 @@ export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
-            email: '',
+            username: '',
             password: '',
-            password_confirmation: '',
+            teksUsername: '',
             hide: true,
+            cekData: null
+        }
+
+        AsyncStorage.getItem('REGISTER', (error, result) => {
+            if (result) {
+                let resultParsed = JSON.parse(result)
+                this.setState({
+                    cekData: true,
+                    teksUsername: resultParsed.username
+                });
+            }
+        });
+    }
+
+    setItemStorage = async (key, value) => {
+        try {
+            let dataStringify = JSON.stringify(value)
+            await AsyncStorage.setItem(key, dataStringify);
+        } catch (error) {
+            console.log("Error: " + error)
         }
     }
 
-    registerData = () => {
-        let dataku = {
-            name: this.state.name,
-            email: this.state.email,
-            password: this.state.password,
-            password_confirmation: this.state.password_confirmation
+    getItemStorage = async (key) => {
+        try {
+            const value = await AsyncStorage.getItem(key);
+            if (value !== '') {
+                return value
+            } else {
+                console.log('read data error')
+            }
+        } catch (error) {
+            console.log('read data error')
+        }
+    }
+
+    removeItemStorage = async (key) => {
+        try {
+            await AsyncStorage.removeItem(key)
+        } catch (error) {
+            // remove error
+            console.log(error)
         }
 
-        fetch('https://api-todoapp-pp.herokuapp.com/api/auth/register', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataku)
+        console.log('Done.')
+    }
+
+    saveStorage = () => {
+        let usrnm = this.state.username;
+        let psswrd = this.state.password;
+        let data = {
+            username: usrnm,
+            password: psswrd
+        }
+        this.setItemStorage('REGISTER', data).then(() => {
+            alert('Berhasil Login dengan nama ' + data.username + ', silahkan Log In')
+        }).catch((error) => {
+            alert('Gagal membuat akun')
+            console.log(error)
         })
-            .then((response) => response.json())
-            .then((mengrespon) => {
-                console.log(mengrespon)
+    }
+
+    readStorage = () => {
+        this.getItemStorage('REGISTER').then(result => {
+            alert('value' + result)
+        })
+    }
+
+    removeStorage = () => {
+        this.removeItemStorage('REGISTER')
+            .then(() => {
+                alert('Berhasil terhapus')
             })
-            .catch(error => { console.log(error) })
     }
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={styles.inputbackground}>
+            <View style={Style.container}>
+                {this.state.cekData ? <Text>{`Hallo! anda sudah mempunyai akun dengan nama ${this.state.teksUsername}, silahkan Log in`}</Text> : null}
+                <View style={Style.inputbackground}>
                     <TextInput
-                        placeholder='Nama lengkap anda'
-                        style={styles.textinput}
-                        onChangeText={(name) => { this.setState({ name }) }}
+                        placeholder='Username'
+                        style={Style.textinput}
+                        onChangeText={(username) => this.setState({ username })}
                     />
                 </View>
 
-                <View style={styles.inputbackground}>
+                <View style={Style.inputbackground}>
                     <TextInput
-                        placeholder='Alamat Email anda'
-                        style={styles.textinput}
-                        onChangeText={(email) => { this.setState({ email }) }}
-                    />
-                </View>
-
-                <View style={styles.inputbackground}>
-                    <TextInput
-                        placeholder='Password baru'
-                        style={styles.inputbackground}
+                        placeholder='Password'
+                        style={Style.textinput}
                         secureTextEntry={this.state.hide}
-                        onChangeText={(password) => { this.setState({ password }) }}
+                        onChangeText={(password) => this.setState({ password })}
                     />
-
                     <TouchableOpacity onPress={() => this.state.hide ? this.setState({ hide: false }) : this.setState({ hide: true })}>
-                        <Image source={this.state.hide ? open : close} style={styles.eye} />
+                        <Image source={this.state.hide ? open : close} style={Style.eye} />
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.inputbackground}>
-                    <TextInput
-                        placeholder='Ulangi Password'
-                        style={styles.inputbackground}
-                        onChangeText={(password_confirmation) => { this.setState({ password_confirmation }) }}
-                    />
+                {/* <TouchableOpacity onPress={this.readStorage} style={Style.tombol}>
+                    <Text style={Style.tulisantombol}>BACA</Text>
+                </TouchableOpacity> */}
 
-                    <TouchableOpacity onPress={() => this.state.hide ? this.setState({ hide: false }) : this.setState({ hide: true })}>
-                        <Image source={this.state.hide ? open : close} style={styles.eye} />
-                    </TouchableOpacity>
-                </View>
-
-                <TouchableOpacity style={styles.tombol} onPress={() => this.registerData()}>
-                    <Text style={styles.tulisantombol}>REGISTER</Text>
+                <TouchableOpacity onPress={this.saveStorage} style={Style.tombol}>
+                    <Text style={Style.tulisantombol}>REGISTER</Text>
                 </TouchableOpacity>
 
-                <View style={styles.punyaakun}>
+                <TouchableOpacity onPress={this.removeStorage} style={Style.tombol}>
+                    <Text style={Style.tulisantombol}>BATAL</Text>
+                </TouchableOpacity>
+
+                {/* <TouchableOpacity onPress={() => alert(`${this.state.cekData}`)} style={Style.tombol}>
+                    <Text style={Style.tulisantombol}>CEK</Text>
+                </TouchableOpacity> */}
+
+                <View style={Style.tekslogin}>
                     <Text>Sudah punya akun? </Text>
-                    <Text onPress={() => this.props.navigation.navigate('Login')} style={styles.tekspunyaakun}>Login</Text>
+                    <Text onPress={() => this.props.navigation.navigate('Login')} style={Style.login}>LOGIN</Text>
                 </View>
             </View>
         )
