@@ -30,18 +30,33 @@ export default class Dashboard extends Component {
         }
     }
 
-    deleteToDoConfirmation = (value, index) => {
+    componentDidUpdate() {
+        console.log('==> componentDidUpdate()')
+        let datastring = JSON.stringify(this.state.dataToDo)
+        AsyncStorage.setItem('todo', datastring)
+            .then(value => {
+                console.log('==> Saved to AsyncStorage with value: ' + datastring)
+            })
+            .catch(e => console.log(e))
+    }
+
+    deleteToDoConfirmation = (index) => {
+        console.log('==> Prompt konfirmasi untuk menghapus Todo')
         Alert.alert(
             "Perhatian!",
             "Apa anda yakin ingin menghapus todo yang ini?",
             [
                 {
                     text: "Oke",
-                    onPress: () => this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })
+                    onPress: () => {
+                        console.log('==> Pressed OKE => Menghapus Todo')
+                        this.setState({ dataToDo: this.state.dataToDo.filter((value, id) => id !== index) })    
+                    }
                 },
                 {
                     text: 'Batal',
-                    style: "cancel"
+                    style: "cancel",
+                    onPress: () => console.log('==> Pressed Cancel Action => Cancel delete todo')
                 }
             ],
             {
@@ -57,7 +72,7 @@ export default class Dashboard extends Component {
                     <View style={styles.backgroundtitle}>
                         <Text style={styles.tekstitle}>{value.title}</Text>
 
-                        <TouchableOpacity onPress={() => this.deleteToDoConfirmation(value, index)}>
+                        <TouchableOpacity onPress={() => this.deleteToDoConfirmation(index)}>
                             <Image source={buang} style={styles.buanglogo} />
                         </TouchableOpacity>
                     </View>
